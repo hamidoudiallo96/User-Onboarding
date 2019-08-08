@@ -7,17 +7,10 @@ import 'semantic-ui-css/semantic.min.css'
 import './App.css';
 
 function App({errors,touched,values,status}) {
-  const  [user,setUser] = useState([
-    {
-      name: 'Hamidou Diallo',
-      email: 'Dio.Hamidou@gmail.com',
-      password: 'Helloed',
-      tos: 'false'
-    }
-  ])
+  const  [user,setUser] = useState([])
   useEffect(()=>{
     if(status){
-      setUser([...user,status])
+      setUser(user =>[...user,status])
     }
   },[status])
   
@@ -58,6 +51,12 @@ function App({errors,touched,values,status}) {
         {touched.password && errors.password && (
           <p className="error">{errors.password}</p>
         )}
+
+        <Field component = "select" name = 'role'>
+          <option value="UI-Designer">UI Designer</option>
+          <option value="Frontend Developer">Frontend Developer</option>
+          <option value="Backend Devloper">Backend Developer</option>
+        </Field>
         
 
         <Field 
@@ -91,12 +90,13 @@ function App({errors,touched,values,status}) {
 
 
 const FormikApp = withFormik({
-  mapPropsToValues({name,email,password,tos}){
+  mapPropsToValues({name,email,password,tos,role}){
     return{
       name: name || '',
       email: email || '',
       password: password || '',
-      tos: tos || false
+      tos: tos || false,
+      role: role || "UI-Designer"
     }
   },
   // Validation
@@ -108,7 +108,7 @@ const FormikApp = withFormik({
     
   }),
   handleSubmit(values,{resetForm,setErrors,setSubmitting,setStatus}){
-    if(values.email === 'alreadytaken@atb.dev'){
+    if(values.email === 'waffle@syrup.com'){
       setErrors({email: 'That email is already taken'})
     }
       axios
